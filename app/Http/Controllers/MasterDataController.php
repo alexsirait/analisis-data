@@ -212,11 +212,7 @@ class MasterDataController extends Controller
 
             DB::beginTransaction();
 
-            $data = DB::table('masterdata')->get()->pluck('kebersihan')
-                    ->merge(DB::table('masterdata')->get()->pluck('ruang'))
-                    ->merge(DB::table('masterdata')->get()->pluck('pelayanan'))
-                    ->merge(DB::table('masterdata')->get()->pluck('makanan'))
-                    ->merge(DB::table('masterdata')->get()->pluck('fasilitas'));
+            $data = DB::table('masterdata')->get()->pluck('fasilitas');
 
             $wordCounts = $this->countWordsInDataWordFreq($data);
             arsort($wordCounts);
@@ -241,8 +237,8 @@ class MasterDataController extends Controller
     private function countWordsInDataKepuasan($data)
     {
         $wordCounts = [
-            'Sangat Puas' => 0,
-            'Puas' => 0,
+            'Sangat Baik' => 0,
+            'Baik' => 0,
             'Cukup' => 0,
             'Kurang' => 0,
             'Sangat Kurang' => 0
@@ -259,19 +255,156 @@ class MasterDataController extends Controller
         return $wordCounts;
     }
 
-    public function jenisKepuasan(Request $req)
+    public function jenisKebersihan(Request $req)
     {
         try {
 
             DB::beginTransaction();
 
-            $data = DB::table('masterdata')->get()->pluck('kebersihan')
-                ->merge(DB::table('masterdata')->get()->pluck('ruang'))
-                ->merge(DB::table('masterdata')->get()->pluck('pelayanan'))
-                ->merge(DB::table('masterdata')->get()->pluck('makanan'))
-                ->merge(DB::table('masterdata')->get()->pluck('fasilitas'));
+            $data = DB::table('masterdata')->get()->pluck('kebersihan');
 
             $wordCounts = $this->countWordsInDataKepuasan($data);
+
+            DB::commit();
+
+            return response()->json($wordCounts);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'MESSAGETYPE' => 'E',
+                'MESSAGE' => 'Something went wrong',
+                'SERVERMSG' => dd($th->getMessage()),
+            ], 400)->header(
+                'Accept',
+                'application/json'
+            );
+        }
+    }
+
+    private function countWordsInDataKepuasanRuang($data)
+    {
+        $wordCounts = [
+            'Sangat Luas' => 0,
+            'Luas' => 0,
+            'Cukup' => 0,
+            'Kurang' => 0,
+            'Sangat Kurang' => 0
+        ];
+
+        foreach ($data as $row) {
+            $words = explode(' ', strtolower($row));
+
+            foreach ($wordCounts as $word => $count) {
+                $wordCounts[$word] += substr_count($row, $word);
+            }
+        }
+
+        return $wordCounts;
+    }
+
+    public function jenisRuang(Request $req)
+    {
+        try {
+
+            DB::beginTransaction();
+
+            $data = DB::table('masterdata')->get()->pluck('ruang');
+
+            $wordCounts = $this->countWordsInDataKepuasanRuang($data);
+
+            DB::commit();
+
+            return response()->json($wordCounts);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'MESSAGETYPE' => 'E',
+                'MESSAGE' => 'Something went wrong',
+                'SERVERMSG' => dd($th->getMessage()),
+            ], 400)->header(
+                'Accept',
+                'application/json'
+            );
+        }
+    }
+
+    private function countWordsInDataKepuasanPelayanan($data)
+    {
+        $wordCounts = [
+            'Sangat Baik' => 0,
+            'Baik' => 0,
+            'Cukup' => 0,
+            'Kurang' => 0,
+            'Sangat Kurang' => 0
+        ];
+
+        foreach ($data as $row) {
+            $words = explode(' ', strtolower($row));
+
+            foreach ($wordCounts as $word => $count) {
+                $wordCounts[$word] += substr_count($row, $word);
+            }
+        }
+
+        return $wordCounts;
+    }
+
+    public function jenisPelayanan(Request $req)
+    {
+        try {
+
+            DB::beginTransaction();
+
+            $data = DB::table('masterdata')->get()->pluck('pelayanan');
+
+            $wordCounts = $this->countWordsInDataKepuasanPelayanan($data);
+
+            DB::commit();
+
+            return response()->json($wordCounts);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'MESSAGETYPE' => 'E',
+                'MESSAGE' => 'Something went wrong',
+                'SERVERMSG' => dd($th->getMessage()),
+            ], 400)->header(
+                'Accept',
+                'application/json'
+            );
+        }
+    }
+
+    private function countWordsInDataKepuasanMakanan($data)
+    {
+        $wordCounts = [
+            'Sangat Memuaskan' => 0,
+            'Memuaskan' => 0,
+            'Biasa Saja' => 0,
+            'Kurang Memuaskan' => 0,
+            'Sangat Kurang Memuaskan' => 0
+        ];
+
+        foreach ($data as $row) {
+            $words = explode(' ', strtolower($row));
+
+            foreach ($wordCounts as $word => $count) {
+                $wordCounts[$word] += substr_count($row, $word);
+            }
+        }
+
+        return $wordCounts;
+    }
+
+    public function jenisMakanan(Request $req)
+    {
+        try {
+
+            DB::beginTransaction();
+
+            $data = DB::table('masterdata')->get()->pluck('makanan');
+
+            $wordCounts = $this->countWordsInDataKepuasanMakanan($data);
 
             DB::commit();
 
@@ -297,13 +430,9 @@ class MasterDataController extends Controller
 
             $data = DB::select("SELECT 
                                     GROUP_CONCAT(
-                                        CONCAT_WS(' ', 
-                                            masterdata.kebersihan, 
-                                            masterdata.ruang, 
-                                            masterdata.pelayanan, 
-                                            masterdata.makanan, 
+                                        CONCAT_WS('', 
                                             masterdata.fasilitas
-                                        ) SEPARATOR '; '
+                                        ) SEPARATOR ' '
                                     ) AS combined_column
                                 FROM masterdata;");
 

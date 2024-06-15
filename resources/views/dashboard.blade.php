@@ -8,7 +8,7 @@
     <div class="wrapper_content">
         <body style="background-color: hsl(252, 29%, 97%);">
             <div class="row m-0">
-                <div class="row vh-100 m-0 p-0">
+                <div class="row m-0 p-0">
                     <!-- Card Umur -->
                     <div class="col-lg-4">
                         <div class="card h-100 rounded-4 border-0 shadow-sm">
@@ -139,6 +139,20 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <span class="fw-bold bg-green200 rounded p-2">Positive Sentiment</span>
+                                        <div class="fw-bold p-2 h4" id="PositiveF">10%</div>
+                                    </div>
+                                    <div>
+                                        <span class="fw-bold bg-gray100 rounded p-2">Neutral Sentiment</span>
+                                        <div class="fw-bold p-2 h4" id="NeutralF">10%</div>
+                                    </div>
+                                    <div>
+                                        <span class="fw-bold bg-red100 rounded p-2">Negative Sentiment</span>
+                                        <div class="fw-bold p-2 h4" id="NegativeF">10%</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -148,7 +162,7 @@
                             <div class="card-body">
                                 <div class="d-flex gap-3 align-items-center">
                                     <h6 class="px-3 py-2 rounded-1 text-white d-inline-block" style="background-color: #6A6BFB;">Jenis Opsi</h6>
-                                    <h6 class="px-3 py-1 rounded-pill text-secondary d-inline-block" style="background-color: #E9E7FD; font-size: 14px;">Jenis Kepuasan</h6>
+                                    <h6 class="px-3 py-1 rounded-pill text-secondary d-inline-block" style="background-color: #E9E7FD; font-size: 14px;">Jenis Kebersihan</h6>
                                 </div>
                                 <div id="chartOpsi"></div>
                             </div>
@@ -206,6 +220,49 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>  
+            <div class="">
+                <div class="row m-0 p-0">
+                    <!-- Card Jenis Opsi -->
+                    <div class="col-lg-4 mt-3">
+                        <div class="card rounded-4 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex gap-3 align-items-center">
+                                    <h6 class="px-3 py-2 rounded-1 text-white d-inline-block" style="background-color: #6A6BFB;">Jenis Opsi</h6>
+                                    <h6 class="px-3 py-1 rounded-pill text-secondary d-inline-block" style="background-color: #E9E7FD; font-size: 14px;">Jenis Ruang</h6>
+                                </div>
+                                <div id="chartOpsi2"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card Jenis Check Box -->
+                    <!-- Card Jenis Opsi -->
+                    <div class="col-lg-4 mt-3">
+                        <div class="card rounded-4 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex gap-3 align-items-center">
+                                    <h6 class="px-3 py-2 rounded-1 text-white d-inline-block" style="background-color: #6A6BFB;">Jenis Opsi</h6>
+                                    <h6 class="px-3 py-1 rounded-pill text-secondary d-inline-block" style="background-color: #E9E7FD; font-size: 14px;">Jenis Pelayanan</h6>
+                                </div>
+                                <div id="chartOpsi3"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card Jenis Check Box -->
+                    <!-- Card Jenis Opsi -->
+                    <div class="col-lg-4 mt-3">
+                        <div class="card rounded-4 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex gap-3 align-items-center">
+                                    <h6 class="px-3 py-2 rounded-1 text-white d-inline-block" style="background-color: #6A6BFB;">Jenis Opsi</h6>
+                                    <h6 class="px-3 py-1 rounded-pill text-secondary d-inline-block" style="background-color: #E9E7FD; font-size: 14px;">Jenis Makanan</h6>
+                                </div>
+                                <div id="chartOpsi4"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card Jenis Check Box -->
                 </div>
             </div>
         
@@ -329,13 +386,13 @@
             <script>
                 $.ajax({
                     type: "GET",
-                    url: "{{ route('jenisKepuasan') }}",
+                    url: "{{ route('jenisKebersihan') }}",
                     dataType: "JSON",
                     success: function (data) {
                         const sortedKeys = Object.keys(data).sort((a, b) => {
                             const order = {
-                                "Sangat Puas": 0,
-                                "Puas": 1,
+                                "Sangat Baik": 0,
+                                "Baik": 1,
                                 "Cukup": 2,
                                 "Kurang": 3,
                                 "Sangat Kurang": 4
@@ -350,7 +407,7 @@
                             width: 400,
                             type: 'pie',
                         },
-                        labels: ['Sangat Puas', 'Puas', 'Cukup', 'Kurang', 'Sangat Kurang'],
+                        labels: ['Sangat Baik', 'Baik', 'Cukup', 'Kurang', 'Sangat Kurang'],
                         markers: {
                             shape: 'square',
                             size: 8
@@ -394,6 +451,225 @@
                         };
                 
                         let chartPie = new ApexCharts(document.querySelector("#chartOpsi"), optionsPie);
+                        chartPie.render();
+                    }
+                });
+            </script>
+            <!-- Script Chart Pie -->
+            <script>
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('jenisRuang') }}",
+                    dataType: "JSON",
+                    success: function (data) {
+                        const sortedKeys = Object.keys(data).sort((a, b) => {
+                            const order = {
+                                "Sangat Luas": 0,
+                                "Luas": 1,
+                                "Cukup": 2,
+                                "Kurang": 3,
+                                "Sangat Kurang": 4
+                            };
+                            return order[a] - order[b];
+                        });
+
+                        const newSeriesData = sortedKeys.map(key => data[key]);
+                        let optionsPie = {
+                            series: newSeriesData,
+                            chart: {
+                            width: 400,
+                            type: 'pie',
+                        },
+                        labels: ['Sangat Luas', 'Luas', 'Cukup', 'Kurang', 'Sangat Kurang'],
+                        markers: {
+                            shape: 'square',
+                            size: 8
+                        },
+                        legend: {
+                            position: 'right',
+                            horizontalAlign: 'center',
+                            itemMargin: {
+                                vertical: 4
+                            },
+                            markers: {
+                                width: 14,
+                                height: 14,
+                                radius: 0,
+                            },
+                        },
+                        responsive: [
+                            {
+                                breakpoint: 1400,
+                                options: {
+                                    chart: {
+                                    width: 380
+                                    },
+                                    legend: {
+                                    position: 'right'
+                                    }
+                                }
+                            },
+                            {
+                                breakpoint: 480,
+                                options: {
+                                    chart: {
+                                    width: 300
+                                    },
+                                    legend: {
+                                    position: 'bottom'
+                                    }
+                                }
+                            }
+                        ]
+                        };
+                
+                        let chartPie = new ApexCharts(document.querySelector("#chartOpsi2"), optionsPie);
+                        chartPie.render();
+                    }
+                });
+            </script>
+            <!-- Script Chart Pie -->
+            <script>
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('jenisPelayanan') }}",
+                    dataType: "JSON",
+                    success: function (data) {
+                        const sortedKeys = Object.keys(data).sort((a, b) => {
+                            const order = {
+                                "Sangat Memuaskan": 0,
+                                "Memuaskan": 1,
+                                "Cukup": 2,
+                                "Kurang Memuaskan": 3,
+                                "Sangat Kurang Memuaskan": 4
+                            };
+                            return order[a] - order[b];
+                        });
+
+                        const newSeriesData = sortedKeys.map(key => data[key]);
+                        let optionsPie = {
+                            series: newSeriesData,
+                            chart: {
+                            width: 400,
+                            type: 'pie',
+                        },
+                        labels: ['Sangat Puas', 'Puas', 'Cukup', 'Kurang Puas', 'Sangat Kurang Puas'],
+                        markers: {
+                            shape: 'square',
+                            size: 8
+                        },
+                        legend: {
+                            position: 'right',
+                            horizontalAlign: 'center',
+                            itemMargin: {
+                                vertical: 4
+                            },
+                            markers: {
+                                width: 14,
+                                height: 14,
+                                radius: 0,
+                            },
+                        },
+                        responsive: [
+                            {
+                                breakpoint: 1400,
+                                options: {
+                                    chart: {
+                                    width: 380
+                                    },
+                                    legend: {
+                                    position: 'right'
+                                    }
+                                }
+                            },
+                            {
+                                breakpoint: 480,
+                                options: {
+                                    chart: {
+                                    width: 300
+                                    },
+                                    legend: {
+                                    position: 'bottom'
+                                    }
+                                }
+                            }
+                        ]
+                        };
+                
+                        let chartPie = new ApexCharts(document.querySelector("#chartOpsi3"), optionsPie);
+                        chartPie.render();
+                    }
+                });
+            </script>
+            <!-- Script Chart Pie -->
+            <script>
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('jenisMakanan') }}",
+                    dataType: "JSON",
+                    success: function (data) {
+                        const sortedKeys = Object.keys(data).sort((a, b) => {
+                            const order = {
+                                "Sangat Puas": 0,
+                                "Puas": 1,
+                                "Cukup": 2,
+                                "Kurang": 3,
+                                "Sangat Kurang": 4
+                            };
+                            return order[a] - order[b];
+                        });
+
+                        const newSeriesData = sortedKeys.map(key => data[key]);
+                        let optionsPie = {
+                            series: newSeriesData,
+                            chart: {
+                            width: 400,
+                            type: 'pie',
+                        },
+                        labels: ['Sangat Puas', 'Puas', 'Biasa Saja', 'Kurang', 'Sangat Kurang'],
+                        markers: {
+                            shape: 'square',
+                            size: 8
+                        },
+                        legend: {
+                            position: 'right',
+                            horizontalAlign: 'center',
+                            itemMargin: {
+                                vertical: 4
+                            },
+                            markers: {
+                                width: 14,
+                                height: 14,
+                                radius: 0,
+                            },
+                        },
+                        responsive: [
+                            {
+                                breakpoint: 1400,
+                                options: {
+                                    chart: {
+                                    width: 380
+                                    },
+                                    legend: {
+                                    position: 'right'
+                                    }
+                                }
+                            },
+                            {
+                                breakpoint: 480,
+                                options: {
+                                    chart: {
+                                    width: 300
+                                    },
+                                    legend: {
+                                    position: 'bottom'
+                                    }
+                                }
+                            }
+                        ]
+                        };
+                
+                        let chartPie = new ApexCharts(document.querySelector("#chartOpsi4"), optionsPie);
                         chartPie.render();
                     }
                 });
@@ -535,6 +811,42 @@
 
                     anychart.onDocumentReady(function() {
                         let map = anychart.map();
+
+                        let datadaerah = [
+                            {"id":"ID.AC","value":"Aceh"},
+                            {"id":"ID.KI","value":"KalimantanTimur"},
+                            {"id":"ID.JR","value":"JawaBarat"},
+                            {"id":"ID.JT","value":"JawaTengah"},
+                            {"id":"ID.BE","value":"Bengkulu"},
+                            {"id":"ID.BT","value":"Banten"},
+                            {"id":"ID.JK","value":"Jakarta"},
+                            {"id":"ID.KB","value":"KalimantanBarat"},
+                            {"id":"ID.LA","value":"Lampung"},
+                            {"id":"ID.SL","value":"SulawesiSelatan"},
+                            {"id":"ID.BB","value":"BangkaBelitung"},
+                            {"id":"ID.BA","value":"Bali"},
+                            {"id":"ID.JI","value":"JawaTimur"},
+                            {"id":"ID.KS","value":"KalimantanSelatan"},
+                            {"id":"ID.NT","value":"NusaTenggaraTimur"},
+                            {"id":"ID.SE","value":"SulawesiTenggara"},
+                            {"id":"ID.SR","value":"SulawesiBarat"},
+                            {"id":"ID.KR","value":"KepulauanRiau"},
+                            {"id":"ID.GO","value":"Gorontalo"},
+                            {"id":"ID.JA","value":"Jambi"},
+                            {"id":"ID.KT","value":"KalimantanTengah"},
+                            {"id":"ID.IB","value":"IndonesiaBagianBarat"},
+                            {"id":"ID.SU","value":"SumateraUtara"},
+                            {"id":"ID.RI","value":"Riau"},
+                            {"id":"ID.SW","value":"SulawesiUtara"},
+                            {"id":"ID.133","value":"TidakkodedalamsistempembagianwilayahIndonesia"},
+                            {"id":"ID.SB","value":"SumateraBarat"},
+                            {"id":"ID.YO","value":"Yogyakarta"},
+                            {"id":"ID.MA","value":"Maluku"},
+                            {"id":"ID.NB","value":"NusaTenggaraBarat"},
+                            {"id":"ID.SG","value":"SulawesiTengah"},
+                            {"id":"ID.ST","value":"SulawesiTengah"},
+                            {"id":"ID.PA","value":"Papua"}
+                        ];
                 
                         let dataSet = [
                             {"id":"ID.AC","value":Aceh},
@@ -595,9 +907,10 @@
                 
                             dataSet.forEach(data => {
                                 if (!(data.value in addedValues)) {
+                                    let objIndex = datadaerah.find(item => item.id == data.id);
                                     if (data.value > 0) {
                                         items.push({
-                                            text: data.value.toString(),
+                                            text: data.value.toString() + " (" + objIndex.value + ")",
                                             iconFill: series.colorScale().valueToColor(data.value)
                                         });
                                     } else {
@@ -691,6 +1004,56 @@
                         $("#boxTop5").text(top5[4].value.provinsi);
                         $("#percentageBoxTop5").css("width", top5[4].value.persentase+"%");
 
+                    }
+                });
+            </script>
+            <script>
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('wordCloud') }}",
+                    dataType: "JSON",
+                    success: function (RES) {
+                        let paragraf = RES[0].combined_column;
+                        const kataPositif = ["baik", "senang", "bagus", "ceria", "berhasil", "bersih", "nyaman", "efisien", "terang"];
+                        const kataNegatif = ["terlambat", "curiga", "menjengkelkan", "tidak", "negatif", "kecil", "tidak ada", "dilemari", "tidak pernah", "salah"];
+                        const kataNetral = ["dan", "serta", "dan", "dll", "atau", "belum", "tidak", "itu"];
+
+                        let countPositif = 0;
+                        let countNegatif = 0;
+                        let countNetral = 0;
+
+                        const lowerParagraf = paragraf.toLowerCase();
+
+                        kataPositif.forEach(kata => {
+                            if (lowerParagraf.includes(kata)) {
+                                countPositif++;
+                            }
+                        });
+
+                        kataNegatif.forEach(kata => {
+                            if (lowerParagraf.includes(kata)) {
+                                countNegatif++;
+                            }
+                        });
+
+                        kataNetral.forEach(kata => {
+                            if (lowerParagraf.includes(kata)) {
+                                countNetral++;
+                            }
+                        });
+
+                        const totalKataKunci = countPositif + countNegatif + countNetral;
+
+                        const persentasePositif = (countPositif / totalKataKunci) * 100;
+                        const persentaseNegatif = (countNegatif / totalKataKunci) * 100;
+                        const persentaseNetral = (countNetral / totalKataKunci) * 100;
+
+                        console.log(`Persentase sentimen positif: ${persentasePositif.toFixed(2)}%`);
+                        console.log(`Persentase sentimen negatif: ${persentaseNegatif.toFixed(2)}%`);
+                        console.log(`Persentase sentimen netral: ${persentaseNetral.toFixed(2)}%`);
+                        $("#PositiveF").text(`${persentasePositif.toFixed(2)}%`)
+                        $("#NeutralF").text(`${persentaseNetral.toFixed(2)}%`)
+                        $("#NegativeF").text(`${persentaseNegatif.toFixed(2)}%`)
                     }
                 });
             </script>
